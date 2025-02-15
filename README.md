@@ -1,4 +1,4 @@
-# Simple JavaScript Template Engine
+# 🛠️✨ Simple JavaScript Template Engine 🚀📄
 
 A lightweight and minimalistic JavaScript template engine inspired by:
 
@@ -7,21 +7,21 @@ A lightweight and minimalistic JavaScript template engine inspired by:
 
 ---
 
-## Features
+## 🎯 Features
 
-- **Lightweight**: No dependencies, just pure JavaScript.
-- **Simple Syntax**: Use `<% %>` for JavaScript logic and `<%= %>` for outputting variables.
-- **Fast and Efficient**: Minimal overhead for quick rendering.
+- **🌱 Lightweight**: No dependencies, just pure JavaScript.
+- **📝 Simple Syntax**: Use `<% %>` for JavaScript logic and `<%= %>` for outputting variables.
+- **⚡ Fast and Efficient**: Minimal overhead for quick rendering.
 
 ---
 
-## How It Works
+## � How It Works
 
 The engine converts a template string into a JavaScript function using `new Function()`. It processes `<% %>` for logic and `<%= %>` for variable insertion, making it easy to dynamically generate HTML.
 
 ---
 
-## Usage
+## 🛠️ Usage
 
 1. Define your template using `<% %>` and `<%= %>`.
 2. Pass the template string and data to the `template` function.
@@ -29,7 +29,7 @@ The engine converts a template string into a JavaScript function using `new Func
 
 ---
 
-## Inspiration
+## 📚 Inspiration
 
 This project builds on the ideas from:
 
@@ -38,10 +38,10 @@ This project builds on the ideas from:
 
 ---
 
-## License
+## 📜 License
 
 MIT License. Feel free to use, modify, and share!
 
 ---
 
-Enjoy! 🚀
+Enjoy! 🚀🎉
