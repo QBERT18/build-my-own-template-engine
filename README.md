@@ -50,7 +50,7 @@ npm install
 node index.js
 ```
 
-After `node index.js` finishes, open the generated `output-index.html` in a browser.
+After `node index.js` finishes, open the generated `output/index.html` in a browser. The `output/` folder is created automatically and is not tracked in git.
 
 ## Example
 
@@ -78,14 +78,14 @@ Rendered output:
 <ul><li>one</li><li>two</li><li>three</li></ul>
 ```
 
-For a full end-to-end example, see the sample template [index.html](index.html) and the data object used by the runner at [index.js:39-46](index.js#L39-L46). Running `node index.js` renders that template into `output-index.html`.
+For a full end-to-end example, see the sample template [index.html](index.html) and the data object used by the runner at [index.js:39-46](index.js#L39-L46). Running `node index.js` renders that template into `output/index.html`.
 
 ## Project layout
 
-- `index.js` — the template engine plus a runner that reads `index.html` and writes `output-index.html`.
+- `index.js` — the template engine plus a runner that reads `index.html` and writes `output/index.html`.
 - `index.html` — sample template used by the runner.
 - `styles.css` — stylesheet referenced by the sample template.
-- `output-index.html` — generated output (overwritten on each run).
+- `output/` — generated output directory (created on first run, gitignored).
 
 ## Limitations
 

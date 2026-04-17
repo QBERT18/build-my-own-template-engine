@@ -5,7 +5,8 @@ const prettier = require("prettier");
 const filename = "index.html";
 const filePath = path.join(__dirname, filename);
 
-const output = "./output-index.html";
+const outputDir = path.join(__dirname, "output");
+const output = path.join(outputDir, "index.html");
 
 var TemplateEngine = function (template, data) {
   var regex = /<%([^%>]+)?%>/g;
@@ -51,6 +52,7 @@ fs.readFile(filePath, "utf8", (err, template) => {
 });
 
 async function writeFile(content) {
+  fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFile(output, content, "utf8", (err) => {
     if (err) {
       console.error("Error writing to file:", err);

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-- Run the engine (reads `index.html`, writes `output-index.html`): `node index.js`
+- Run the engine (reads `index.html`, writes `output/index.html`): `node index.js`
 - Install deps: `npm install`
 
 No test runner, linter, or build step is configured. `npm test` is a placeholder that intentionally exits 1.
@@ -20,7 +20,7 @@ Two collaborating concerns live in one file:
    - Content inside `<% %>` is classified by `reExp` (`/(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g`): control-flow lines are emitted verbatim so loops/conditionals nest correctly; everything else is pushed onto `r` as an expression.
    - The assembled code is passed to `new Function(...)` and invoked with `.apply(data)`, so template expressions reference inputs via `this.*` (e.g. `<% this.skills[index] %>`).
 
-2. **File pipeline** (bottom half of `index.js`) — reads `index.html`, runs it through `TemplateEngine` with a hard-coded data object, formats the result with `prettier` (HTML parser), and writes `output-index.html`.
+2. **File pipeline** (bottom half of `index.js`) — reads `index.html`, runs it through `TemplateEngine` with a hard-coded data object, formats the result with `prettier` (HTML parser), ensures the `output/` directory exists via `fs.mkdirSync(..., { recursive: true })`, and writes `output/index.html`. The `output/` folder is gitignored.
 
 ### Gotchas worth knowing before editing
 

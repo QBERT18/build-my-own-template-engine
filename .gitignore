@@ -131,3 +131,6 @@ dist
 
 # Claude Code local config / plans
 .claude/
+
+# Generated template output
+output/
