@@ -1,47 +1,105 @@
-# 🛠️✨ Simple JavaScript Template Engine 🚀📄
+# Simple JavaScript Template Engine
 
-A lightweight and minimalistic JavaScript template engine inspired by:
+A minimal JavaScript template engine that compiles `<% %>` markup into a function and renders it against a data object.
 
-- [JavaScript Template Engine in Just 20 Lines](https://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line) by Krasimir Tsonev
-- [JavaScript Micro-Templating](https://johnresig.com/blog/javascript-micro-templating/) by John Resig
+## Overview
 
----
+The engine reads an HTML template containing embedded JavaScript, renders it with a supplied data object, and writes a formatted HTML file to disk. It has a single runtime dependency (`prettier`, used only to pretty-print the output).
 
-## 🎯 Features
+## How it works
 
-- **🌱 Lightweight**: No dependencies, just pure JavaScript.
-- **📝 Simple Syntax**: Use `<% %>` for JavaScript logic and `<%= %>` for outputting variables.
-- **⚡ Fast and Efficient**: Minimal overhead for quick rendering.
+A regex walks the template and splits it into static chunks and tag contents. Control-flow lines inside `<% %>` are emitted verbatim into the generated source; non-control lines are pushed onto a result array as expressions. The assembled source is compiled with `new Function()` and invoked with `.apply(data)`, so template expressions reference inputs via `this.*`.
 
----
+## Template syntax
 
-## � How It Works
+Only `<% %>` tags are recognized. Two usage patterns:
 
-The engine converts a template string into a JavaScript function using `new Function()`. It processes `<% %>` for logic and `<%= %>` for variable insertion, making it easy to dynamically generate HTML.
+- **Control flow** — anything starting with `if`, `for`, `else`, `switch`, `case`, `break`, `{`, or `}` is emitted as code:
 
----
+  ```html
+  <% if (this.isAdmin) { %>
+    <p>Welcome, admin.</p>
+  <% } else { %>
+    <p>Welcome.</p>
+  <% } %>
 
-## 🛠️ Usage
+  <% for (var i in this.items) { %>
+    <li><% this.items[i] %></li>
+  <% } %>
+  ```
 
-1. Define your template using `<% %>` and `<%= %>`.
-2. Pass the template string and data to the `template` function.
-3. Render the output wherever needed.
+- **Output expression** — anything else inside the tag is evaluated and its value inserted into the output:
 
----
+  ```html
+  <h1>Hello, <% this.name %>!</h1>
+  ```
 
-## 📚 Inspiration
+Classification is performed by the regex at [index.js:12](index.js#L12).
 
-This project builds on the ideas from:
+## Prerequisites
 
-1. [JavaScript Template Engine in Just 20 Lines](https://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line) by Krasimir Tsonev.
-2. [JavaScript Micro-Templating](https://johnresig.com/blog/javascript-micro-templating/) by John Resig.
+- Node.js 16 or newer
+- npm
 
----
+## Run it locally
 
-## 📜 License
+```bash
+git clone https://github.com/QBERT18/build-my-own-template-engine.git
+cd build-my-own-template-engine
+npm install
+node index.js
+```
 
-MIT License. Feel free to use, modify, and share!
+After `node index.js` finishes, open the generated `output-index.html` in a browser.
 
----
+## Example
 
-Enjoy! 🚀🎉
+Minimal usage (the `TemplateEngine` function is defined at the top of [index.js](index.js); copy it into your own script to use it standalone):
+
+```js
+var template =
+  "<h1>Hello, <% this.name %>!</h1>" +
+  "<% if (this.items.length) { %>" +
+  "<ul><% for (var i in this.items) { %><li><% this.items[i] %></li><% } %></ul>" +
+  "<% } else { %>" +
+  "<p>No items.</p>" +
+  "<% } %>";
+
+var html = TemplateEngine(template, {
+  name: "Ada",
+  items: ["one", "two", "three"],
+});
+```
+
+Rendered output:
+
+```html
+<h1>Hello, Ada!</h1>
+<ul><li>one</li><li>two</li><li>three</li></ul>
+```
+
+For a full end-to-end example, see the sample template [index.html](index.html) and the data object used by the runner at [index.js:39-46](index.js#L39-L46). Running `node index.js` renders that template into `output-index.html`.
+
+## Project layout
+
+- `index.js` — the template engine plus a runner that reads `index.html` and writes `output-index.html`.
+- `index.html` — sample template used by the runner.
+- `styles.css` — stylesheet referenced by the sample template.
+- `output-index.html` — generated output (overwritten on each run).
+
+## Limitations
+
+- `new Function()` evaluates template contents as JavaScript with full access to the host process. Only render templates you trust.
+- The data object is hard-coded in `index.js`; there is no CLI argument parsing. To render with different inputs, edit the object passed to `TemplateEngine` or import the function into your own script.
+- There is no `<%= %>` shorthand. Every `<% %>` tag is either control flow (per the classifier above) or an output expression.
+
+## Inspiration
+
+Ideas and techniques drawn from:
+
+1. [JavaScript Template Engine in Just 20 Lines](https://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line) by Krasimir Tsonev
+2. [JavaScript Micro-Templating](https://johnresig.com/blog/javascript-micro-templating/) by John Resig
+
+## License
+
+MIT.
